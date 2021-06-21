@@ -18,7 +18,7 @@ html.dark-theme {
   --color-44: #a3a3a3;
   --color-c4: #c4c4c4;
   --color-00: #c7c7c7;
-  --color-5e: #5e5e5e;
+  --color-5e: #a3a3a3;
   --color-f5: #f5f5f5;
   --color-footer: #000f17;
 }
@@ -951,7 +951,7 @@ button:active {
   height: 0;
   border-style: solid;
   border-width: 0 10px 10px 10px;
-  border-color: transparent transparent #fff transparent;
+  border-color: transparent transparent var(--color-ff) transparent;
   position: absolute;
   top: 0;
   left: 15px;

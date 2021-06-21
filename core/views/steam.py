@@ -58,6 +58,11 @@ class LogoutSteam(APIView):
     def get(self, request):
         request.user.talantuser.steam_openid = ''
         request.user.talantuser.steam_id = None
+        request.user.talantuser.cs_result.result = False
+        request.user.talantuser.cs_result.result = False
+        request.user.talantuser.dota_result.result = False
+        request.user.talantuser.cs_result.save()
+        request.user.talantuser.dota_result.save()
         request.user.talantuser.save()
 
         return redirect('user_page')

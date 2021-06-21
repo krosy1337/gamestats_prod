@@ -13,12 +13,14 @@ def index_page(request):
 @login_required
 def user_page(request):
     games = []
+    general_score = 0
     if request.user.talantuser.dota_result.result and not request.user.talantuser.dota_result.error:
         games.append(request.user.talantuser.dota_result.result_num)
     if request.user.talantuser.cs_result.result and not request.user.talantuser.cs_result.error:
         games.append(request.user.talantuser.cs_result.result_num)
 
-    general_score = int(sum(games)/len(games))
+    if len(games):
+        general_score = int(sum(games)/len(games))
     #or request.user.talantuser.dota_result.error
     return render(request, 'core/user.html', {
         'user': request.user,

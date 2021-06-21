@@ -26,11 +26,7 @@ function startCheckingResult(response, block) {
 }
 
 function checkErrors(response) {
-    if (response.error) {
-        console.log(response.error)
-        return true
-    }
-    return false
+    return !!response.error
 
 }
 

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
     <link rel="shortcut icon" href="{% static 'core/img/favicon.ico' %}" type="image/x-icon">
-	<link rel="icon" href="{% static 'core/img/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'core/img/favicon.ico' %}" type="image/x-icon">
 
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -25,7 +25,7 @@
             temp_task_dota_id = "{{ user.talantuser.dota_task }}";
         {% endif %}
         {% if user.talantuser.cs_task %}
-            temp_task_cs_id = "{{ user.talantuser.cs_task }}";
+        temp_task_cs_id = "{{ user.talantuser.cs_task }}";
         {% endif %}
         let temp_csrf_token = "{{ csrf_token }}";
         let temp_dota_start_url = "{% url 'analyse-dota' %}";
@@ -106,28 +106,6 @@
 
                         </div>
                         {% endif %}
-                        <!--                        {% if user.talantuser.blizzard_id %}-->
-                        <!--                            <div class="side__account">-->
-                        <!--                            <img class="side__account-img" src="{% static 'core/img/blizzard-icon.svg' %}"-->
-                        <!--                                 alt="blizzard icon">-->
-                        <!--                            <div class="side__account-info">-->
-                        <!--                    <span class="side__account-name">-->
-                        <!--                        БоеваяЧерепаха-->
-                        <!--                    </span>-->
-                        <!--                                <span class="side__account-id">-->
-                        <!--                        ID: 741230-->
-                        <!--                    </span>-->
-                        <!--                            </div>-->
-                        <!--                            <a class="side__account-exit">-->
-                        <!--                                <svg class="side__account-exit" width="23" height="23" viewBox="0 0 23 23" fill="none"-->
-                        <!--                                     xmlns="http://www.w3.org/2000/svg">-->
-                        <!--                                    <path fill-rule="evenodd" clip-rule="evenodd"-->
-                        <!--                                          d="M6.2854 5.02808L5.02832 6.28516L10.0566 11.3135L5.02832 16.3418L6.2854 17.5989L11.3137 12.5706L16.342 17.5989L17.5991 16.3418L12.5708 11.3135L17.5991 6.28517L16.342 5.02809L11.3137 10.0564L6.2854 5.02808Z"-->
-                        <!--                                          fill="#F36459"/>-->
-                        <!--                                </svg>-->
-                        <!--                            </a>-->
-                        <!--                        </div>-->
-                        <!--                        {% endif %}-->
                     </div>
                 </div>
                 <div class="side__accounts side__block">
@@ -162,7 +140,19 @@
                                 <h4 class="general-stats__title">Общая статистика</h4>
                                 <span class="general-stats__score"></span>
                             </div>
-                            <h3 class="general-stats__text-stat">У вас низкий уровень командности в играх</h3>
+                            {% if user.talantuser.dota_result.result or user.talantuser.cs_result.result %}
+                                {% if general_result < 55 %}
+                                    <h3 class="general-stats__text-stat">У вас низкий уровень командности в играх</h3>
+                                {% elif 55 <= general_result < 72 %}
+                                    <h3 class="general-stats__text-stat">У вас средний уровень командности в играх</h3>
+                                {% elif 72 <= general_result < 83 %}
+                                    <h3 class="general-stats__text-stat">У вас хороший уровень командности в играх</h3>
+                                {% elif 83 <= general_result %}
+                                    <h3 class="general-stats__text-stat">У вас отличный уровень командности в играх</h3>
+                                {% endif %}
+                            {% else %}
+                            <h3 class="general-stats__text-stat">У вас не проанализировано ни одной игры</h3>
+                            {% endif %}
                         </div>
                         <div class="general-stats__marker"></div>
                         <div class="general-stats__toner toner"></div>
@@ -184,6 +174,7 @@
                                 <img class="game-card__btn-icon" src="{% static 'core/img/reload.svg' %}" alt="reload">
                             </button>
                             {% else %}
+                            {% if user.talantuser.steam_id %}
                             <button class="game-card__btn game-card__analyse game-card__header-item analyse_csgo">
                                 <span class="game-card__btn-text">
                                     анализ
@@ -191,10 +182,13 @@
                                 <img class="game-card__btn-icon" src="{% static 'core/img/analyse.svg' %}"
                                      alt="analyse">
                             </button>
+                            {% else %}
+                            <span class="game-card__header-item">Привяжите игровой аккаунт</span>
+                            {% endif %}
                             {% endif %}
                         </div>
                         {% if user.talantuser.cs_result.result %}
-                            <div class="game-card__body">
+                        <div class="game-card__body">
                             <ul class="game-card__list">
                                 <li class="game-card__stat">
                                     <span class="game-card__param">KD: </span><span
@@ -227,7 +221,7 @@
                                 <img class="game-card__icon" src="{% static 'core/img/dotaIcon.svg' %}" alt="csgo_icon">
                             </div>
                             {% if user.talantuser.dota_result.error %}
-                                <span class="game-card__text-score game-card__header-item">{{ user.talantuser.dota_result.error }}</span>
+                            <span class="game-card__text-score game-card__header-item">{{ user.talantuser.dota_result.error }}</span>
                             <button class="game-card__btn game-card__analyse game-card__header-item analyse_dota">
                                 <span class="game-card__btn-text">
                                     анализ
@@ -246,6 +240,7 @@
                                 <img class="game-card__btn-icon" src="{% static 'core/img/reload.svg' %}" alt="reload">
                             </button>
                             {% else %}
+                            {% if user.talantuser.steam_id %}
                             <button class="game-card__btn game-card__analyse game-card__header-item analyse_dota">
                                 <span class="game-card__btn-text">
                                     анализ
@@ -253,6 +248,9 @@
                                 <img class="game-card__btn-icon" src="{% static 'core/img/analyse.svg' %}"
                                      alt="analyse">
                             </button>
+                            {% else %}
+                            <span class="game-card__header-item">Привяжите игровой аккаунт</span>
+                            {% endif %}
                             {% endif %}
                         </div>
                         {% if user.talantuser.dota_result.result and not user.talantuser.dota_result.error %}
@@ -276,22 +274,22 @@
 
                         <div class="toner"></div>
                     </div>
-<!--                    <div class="game-card game-card_overwatch">-->
-<!--                        <div class="game-card__header">-->
-<!--                            <div class="game-card__icon-wrapper game-card__header-item">-->
-<!--                                <img class="game-card__icon" src="{% static 'core/img/overwatchIcon.svg' %}"-->
-<!--                                     alt="csgo_icon">-->
-<!--                            </div>-->
-<!--                            <button class="game-card__btn game-card__analyse game-card__header-item">-->
-<!--                    <span class="game-card__btn-text">-->
-<!--                        анализ-->
-<!--                    </span>-->
-<!--                                <img class="game-card__btn-icon" src="{% static 'core/img/analyse.svg' %}"-->
-<!--                                     alt="analyse">-->
-<!--                            </button>-->
-<!--                            <div class="dark"></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="game-card game-card_overwatch">-->
+                    <!--                        <div class="game-card__header">-->
+                    <!--                            <div class="game-card__icon-wrapper game-card__header-item">-->
+                    <!--                                <img class="game-card__icon" src="{% static 'core/img/overwatchIcon.svg' %}"-->
+                    <!--                                     alt="csgo_icon">-->
+                    <!--                            </div>-->
+                    <!--                            <button class="game-card__btn game-card__analyse game-card__header-item">-->
+                    <!--                    <span class="game-card__btn-text">-->
+                    <!--                        анализ-->
+                    <!--                    </span>-->
+                    <!--                                <img class="game-card__btn-icon" src="{% static 'core/img/analyse.svg' %}"-->
+                    <!--                                     alt="analyse">-->
+                    <!--                            </button>-->
+                    <!--                            <div class="dark"></div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                 </div>
             </div>
 
